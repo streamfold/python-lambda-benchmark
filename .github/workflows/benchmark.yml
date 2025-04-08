@@ -1,0 +1,63 @@
+name: Run Benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      aws-region:
+        description: 'AWS Region'
+        required: true
+        default: 'us-east-1'
+      otel-layer:
+        description: 'OTEL Lambda Layer'
+        required: true
+        default: 'arn:aws:lambda:us-east-1:184161586896:layer:opentelemetry-collector-amd64-0_13_0:1'
+      rotel-layer:
+        description: 'Rotel Lambda Layer'
+        required: true
+        default: 'arn:aws:lambda:us-east-1:418653438961:layer:rotel-extension-amd64-alpha:12'
+      python-version:
+        description: 'Python version to use'
+        required: true
+        default: '3.13'
+
+jobs:
+  run-benchmark:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ github.event.inputs.python-version }}
+
+      - name: Verify UV installation
+        run: uv --version
+
+      - name: Install deps
+        run: |
+          cd benchmark && uv sync
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_LAMBDA_BENCHMARK_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: run
+        env:
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+          AWS_REGION: ${{ github.event.inputs.aws-region }}
+          OTEL_LAYER: ${{ github.event.inputs.otel-layer }}
+          ROTEL_LAYER: ${{ github.event.inputs.rotel-layer }}
+        run: |
+          ./scripts/benchmark-coldstart.sh
