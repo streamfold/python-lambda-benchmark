@@ -1,6 +1,6 @@
 # python-lambda-benchmark
 
-Small repo to benchmark Lambda runtime execution across different layers.
+Small repo to benchmark Lambda runtime execution across different layers and memory sizes.
 
 Tests:
 * [AWS OpenTelemetry Collector layer](https://github.com/open-telemetry/opentelemetry-lambda)
