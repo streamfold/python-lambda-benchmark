@@ -34,13 +34,17 @@ filtered = filtered.sort_values('memory')
 otel_data = filtered[filtered['base_name'] == 'benchmark-coldstart-otel']
 rotel_data = filtered[filtered['base_name'] == 'benchmark-coldstart-rotel']
 
+x = [128, 256, 512, 1024, 2048, 3072, 4096]
+labels = ['128 MB', '256 MB', '512 MB', '1 GB', '2 GB', '3 GB', '4 GB']
+
 # Generate the line chart
 plt.figure(figsize=(8, 5))
 plt.plot(otel_data['memory'], otel_data['difference'], marker='o', label='OpenTelemetry Lambda')
 plt.plot(rotel_data['memory'], rotel_data['difference'], marker='o', label='Rotel Lambda')
 plt.xlabel('Memory (MB)')
 plt.ylabel('Coldstart Time (ms)')
-plt.title('Coldstart Time Comparison')
+plt.title('Coldstart Comparison')
+plt.xticks(x, labels, rotation='vertical')
 plt.legend()
 plt.grid(True)
 plt.show()
