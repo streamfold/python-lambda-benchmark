@@ -60,4 +60,11 @@ jobs:
           OTEL_LAYER: ${{ github.event.inputs.otel-layer }}
           ROTEL_LAYER: ${{ github.event.inputs.rotel-layer }}
         run: |
-          ./scripts/benchmark-coldstart.sh
+          ./scripts/benchmark-coldstart.sh /tmp/coldstart.out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coldstart-output-${{ github.job }}.csv
+          path: /tmp/coldstart.out
+          overwrite: true
+
