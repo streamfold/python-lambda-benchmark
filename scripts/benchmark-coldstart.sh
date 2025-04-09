@@ -2,7 +2,7 @@
 
 COUNT=${COUNT:-5}
 
-MEMORY_SIZES="128 1024 2048 3072 4096 5120"
+MEMORY_SIZES="128 256 512 1024 2048 3072 4096 5120"
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <output-file>"
