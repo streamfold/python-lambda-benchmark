@@ -64,6 +64,7 @@ jobs:
           AWS_REGION: ${{ github.event.inputs.aws-region }}
           OTEL_LAYER: ${{ github.event.inputs.otel-layer }}
           ROTEL_LAYER: ${{ github.event.inputs.rotel-layer }}
+          DATADOG_LAYER: ${{ github.event.inputs.datadog-layer }}
         run: |
           ./scripts/benchmark-coldstart.sh /tmp/coldstart.out
 
