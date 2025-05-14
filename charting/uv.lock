@@ -2,16 +2,30 @@ version = 1
 requires-python = ">=3.13"
 
 [[package]]
+name = "brokenaxes"
+version = "0.6.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fe/24/3b8232880f8413f5e85bab6ecb5440418f071fdcbdc7090d858ee36026bb/brokenaxes-0.6.2.tar.gz", hash = "sha256:bfa68242f003c02fe57ce7b5c5671c78c733ac8cc51a2be0f3ee6906c18e5d49", size = 9783 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/98/76/16158f60d2305cae16c07e25e9d7c5912c346071e2440fe6fe231982e0d9/brokenaxes-0.6.2-py3-none-any.whl", hash = "sha256:bc0a269c4a9a9a643504fbb7d734a279629cc2cada5ee90c57645e75c89f38ad", size = 7278 },
+]
+
+[[package]]
 name = "charting"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "brokenaxes" },
     { name = "matplotlib" },
     { name = "pandas" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "brokenaxes" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "pandas", specifier = ">=2.2.3" },
 ]
