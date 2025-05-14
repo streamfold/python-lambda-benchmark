@@ -32,12 +32,23 @@ if [ -z "$ROTEL_LAYER" ]; then
   exit 1
 fi
 
+if [ -z "$DATADOG_LAYER" ]; then
+  echo "Must set DATADOG_LAYER"
+  exit 1
+fi
+
+if [ -z "$DD_API_KEY" ]; then
+  echo "Must set DD_API_KEY"
+  exit 1
+fi
+
 cat <<EOF
 Running benchmark with the following:
  - Memory size: $MEMORY_SIZES
  - AWS Region: $AWS_REGION
  - OTEL Layer: $OTEL_LAYER
  - Rotel Layer: $ROTEL_LAYER
+ - Datadog Layer: $DATADOG_LAYER
 EOF
 
 set -e
@@ -70,5 +81,14 @@ for MEMORY_SIZE in ${MEMORY_SIZES}; do
   uv run main.py --path ../function.zip --count $COUNT --function-name benchmark-coldstart-rotel \
     --environment ROTEL_ENV_FILE=/var/task/rotel.env \
     --role-arn "$AWS_ROLE_ARN" --region "$AWS_REGION" --layer "$ROTEL_LAYER" --output "$OUTPUT" \
+    --memory "$MEMORY_SIZE"
+done
+
+for MEMORY_SIZE in ${MEMORY_SIZES}; do
+  echo "Testing Datadog layer at $MEMORY_SIZE MB"
+
+  uv run main.py --path ../function.zip --count $COUNT --function-name benchmark-coldstart-datadog \
+    --environment DD_API_KEY=${DD_API_KEY},DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT=localhost:4318 \
+    --role-arn "$AWS_ROLE_ARN" --region "$AWS_REGION" --layer "$DATADOG_LAYER" --output "$OUTPUT" \
     --memory "$MEMORY_SIZE"
 done

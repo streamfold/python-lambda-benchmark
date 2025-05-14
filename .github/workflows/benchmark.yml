@@ -14,7 +14,11 @@ on:
       rotel-layer:
         description: 'Rotel Lambda Layer'
         required: true
-        default: 'arn:aws:lambda:us-east-1:418653438961:layer:rotel-extension-amd64-alpha:12'
+        default: 'arn:aws:lambda:us-east-1:418653438961:layer:rotel-extension-amd64-alpha:23'
+      datadog-layer:
+        description: 'Datadog Lambda Layer'
+        required: true
+        default: 'arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Extension:53'
       python-version:
         description: 'Python version to use'
         required: true
@@ -56,6 +60,7 @@ jobs:
       - name: run
         env:
           AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
           AWS_REGION: ${{ github.event.inputs.aws-region }}
           OTEL_LAYER: ${{ github.event.inputs.otel-layer }}
           ROTEL_LAYER: ${{ github.event.inputs.rotel-layer }}
